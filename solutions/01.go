@@ -2,6 +2,7 @@ package solutions
 
 import (
 	"log/slog"
+	"math"
 	"strconv"
 	"strings"
 
@@ -71,22 +72,36 @@ func Day1B() {
 }
 
 func rotateLeft(pos, zeroCount *int, value int) {
-	for _ = range value {
-		(*pos)--
-		if *pos == 0 {
-			(*zeroCount)++
-		} else if *pos < 0 {
-			*pos = 99
+	slog.Debug("L", "val", value, "pos", *pos, "zc", *zeroCount)
+
+	fullRounds := int(math.Floor(float64(value) / 100.0))
+	*zeroCount += fullRounds
+	value %= 100
+
+	oldValue := *pos
+	*pos -= value
+
+	if *pos < 0 {
+		if oldValue != 0 {
+			*zeroCount++
 		}
+		*pos += 100
+	} else if *pos == 0 {
+		*zeroCount++
 	}
 }
 
 func rotateRight(pos, zeroCount *int, value int) {
-	for _ = range value {
-		(*pos)++
-		if *pos == 100 {
-			(*zeroCount)++
-			*pos = 0
-		}
+	slog.Debug("R", "val", value, "pos", *pos, "zc", *zeroCount)
+
+	fullRounds := int(math.Floor(float64(value) / 100.0))
+	*zeroCount += fullRounds
+	value %= 100
+
+	*pos += value
+
+	if *pos > 99 {
+		*zeroCount++
+		*pos -= 100
 	}
 }
