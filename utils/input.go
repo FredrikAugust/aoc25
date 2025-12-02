@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 func GetSample(day int) string {
@@ -10,7 +11,7 @@ func GetSample(day int) string {
 	if err != nil {
 		panic("could not open sample input")
 	}
-	return string(content)
+	return strings.TrimSuffix(string(content), "\n")
 }
 
 func GetInput(day int) string {
@@ -18,5 +19,5 @@ func GetInput(day int) string {
 	if err != nil {
 		panic("could not open sample input")
 	}
-	return string(content)
+	return strings.TrimSuffix(string(content), "\n")
 }

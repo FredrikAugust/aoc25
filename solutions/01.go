@@ -40,11 +40,9 @@ func Day1A() {
 		if pos == 0 {
 			zeroCount++
 		}
-
-		slog.Debug("update", "dir", string(line[0]), "amount", line[1:], "new pos", pos)
 	}
 
-	slog.Info("done part1", "result", zeroCount)
+	slog.Info("day 1 done part1", "result", zeroCount)
 }
 
 func Day1B() {
@@ -68,12 +66,10 @@ func Day1B() {
 		}
 	}
 
-	slog.Info("done part2", "result", zeroCount)
+	slog.Info("day 1 done part2", "result", zeroCount)
 }
 
 func rotateLeft(pos, zeroCount *int, value int) {
-	slog.Debug("L", "val", value, "pos", *pos, "zc", *zeroCount)
-
 	fullRounds := int(math.Floor(float64(value) / 100.0))
 	*zeroCount += fullRounds
 	value %= 100
@@ -92,8 +88,6 @@ func rotateLeft(pos, zeroCount *int, value int) {
 }
 
 func rotateRight(pos, zeroCount *int, value int) {
-	slog.Debug("R", "val", value, "pos", *pos, "zc", *zeroCount)
-
 	fullRounds := int(math.Floor(float64(value) / 100.0))
 	*zeroCount += fullRounds
 	value %= 100
