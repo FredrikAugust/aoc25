@@ -10,15 +10,18 @@ import (
 func main() {
 	slog.SetLogLoggerLevel(slog.LevelDebug)
 
-	timeFunc(solutions.Day1A)
-	timeFunc(solutions.Day1B)
+	timeFunc(1, 1, solutions.Day1A)
+	timeFunc(1, 2, solutions.Day1B)
 
-	timeFunc(solutions.Day2A)
-	timeFunc(solutions.Day2B)
+	timeFunc(2, 1, solutions.Day2A)
+	timeFunc(2, 2, solutions.Day2B)
+
+	timeFunc(3, 1, solutions.Day3A)
+	timeFunc(3, 2, solutions.Day3B)
 }
 
-func timeFunc(f func()) {
+func timeFunc(day, part int, f func() int) {
 	pre := time.Now()
-	f()
-	slog.Info("finished", "duration", time.Since(pre))
+	res := f()
+	slog.Info("finished", "day", day, "part", part, "duration", time.Since(pre), "result", res)
 }

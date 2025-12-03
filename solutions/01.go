@@ -1,7 +1,6 @@
 package solutions
 
 import (
-	"log/slog"
 	"math"
 	"strconv"
 	"strings"
@@ -9,7 +8,7 @@ import (
 	"github.com/fredrikaugust/aoc25/utils"
 )
 
-func Day1A() {
+func Day1A() int {
 	input := utils.GetInput(1)
 
 	pos := 50
@@ -42,10 +41,10 @@ func Day1A() {
 		}
 	}
 
-	slog.Info("day 1 done part1", "result", zeroCount)
+	return zeroCount
 }
 
-func Day1B() {
+func Day1B() int {
 	input := utils.GetInput(1)
 
 	pos := 50
@@ -66,7 +65,7 @@ func Day1B() {
 		}
 	}
 
-	slog.Info("day 1 done part2", "result", zeroCount)
+	return zeroCount
 }
 
 func rotateLeft(pos, zeroCount *int, value int) {

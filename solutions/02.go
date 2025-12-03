@@ -1,14 +1,13 @@
 package solutions
 
 import (
-	"log/slog"
 	"strconv"
 	"strings"
 
 	"github.com/fredrikaugust/aoc25/utils"
 )
 
-func Day2A() {
+func Day2A() int {
 	input := utils.GetInput(2)
 
 	invalidInputs := make([]int, 0)
@@ -41,7 +40,7 @@ func Day2A() {
 		result += num
 	}
 
-	slog.Info("day2 part 1", "result", result)
+	return result
 }
 
 func factors(n int) (out []int) {
@@ -57,7 +56,7 @@ func factors(n int) (out []int) {
 	return out
 }
 
-func Day2B() {
+func Day2B() int {
 	input := utils.GetInput(2)
 
 	invalidInputs := make([]int, 0)
@@ -89,5 +88,5 @@ func Day2B() {
 		result += num
 	}
 
-	slog.Info("day2 part 2", "result", result)
+	return result
 }
