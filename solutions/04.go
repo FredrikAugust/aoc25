@@ -1,6 +1,8 @@
 package solutions
 
 func Day4A() int {
+	// input := utils.GetSample(4)
+
 	return 0
 }
 

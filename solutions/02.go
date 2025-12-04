@@ -104,9 +104,9 @@ func Day2B() int {
 	invalidCache := make(map[int]bool, 0)
 
 	for interval := range strings.SplitSeq(input, ",") {
-		parts := strings.Split(interval, "-")
-		start, _ := strconv.Atoi(parts[0])
-		end, _ := strconv.Atoi(parts[1])
+		s, e, _ := strings.Cut(interval, "-")
+		start, _ := strconv.Atoi(s)
+		end, _ := strconv.Atoi(e)
 
 		invalid := findInvalid(start, end, &factorsCache, &invalidCache)
 		invalidInputs = append(invalidInputs, invalid...)
