@@ -18,6 +18,9 @@ func main() {
 
 	timeFunc(3, 1, solutions.Day3A)
 	timeFunc(3, 2, solutions.Day3B)
+
+	timeFunc(4, 1, solutions.Day4A)
+	timeFunc(4, 2, solutions.Day4B)
 }
 
 func timeFunc(day, part int, f func() int) {

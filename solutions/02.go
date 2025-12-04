@@ -43,7 +43,12 @@ func Day2A() int {
 	return result
 }
 
-func factors(n int) (out []int) {
+func factors(n int, cache *map[int][]int) (out []int) {
+	val, exists := (*cache)[n]
+	if exists {
+		return val
+	}
+
 	for i := range n {
 		if i == 0 {
 			continue
@@ -53,34 +58,58 @@ func factors(n int) (out []int) {
 			out = append(out, i)
 		}
 	}
+
+	(*cache)[n] = out
+
 	return out
+}
+
+func findInvalid(start, end int, factorsCache *map[int][]int, invalidCache *map[int]bool) []int {
+	invalidInputs := make([]int, 0)
+	for n := range end - start + 1 {
+		n += start
+
+		val, exists := (*invalidCache)[n]
+		if exists && val {
+			invalidInputs = append(invalidInputs, n)
+			continue
+		} else if exists && !val {
+			continue
+		}
+
+		nStr := strconv.Itoa(n)
+
+		fac := factors(len(nStr), factorsCache)
+
+		found := false
+		for _, f := range fac {
+			repeated := strings.Repeat(nStr[0:f], len(nStr)/f)
+			if repeated == nStr {
+				found = true
+				invalidInputs = append(invalidInputs, n)
+				break
+			}
+		}
+
+		(*invalidCache)[n] = found
+	}
+	return invalidInputs
 }
 
 func Day2B() int {
 	input := utils.GetInput(2)
 
 	invalidInputs := make([]int, 0)
+	factorsCache := make(map[int][]int, 0)
+	invalidCache := make(map[int]bool, 0)
 
 	for interval := range strings.SplitSeq(input, ",") {
 		parts := strings.Split(interval, "-")
 		start, _ := strconv.Atoi(parts[0])
 		end, _ := strconv.Atoi(parts[1])
 
-		for n := range end - start + 1 {
-			n += start
-
-			nStr := strconv.Itoa(n)
-
-			fac := factors(len(nStr))
-
-			for _, f := range fac {
-				repeated := strings.Repeat(nStr[0:f], len(nStr)/f)
-				if repeated == nStr {
-					invalidInputs = append(invalidInputs, n)
-					break
-				}
-			}
-		}
+		invalid := findInvalid(start, end, &factorsCache, &invalidCache)
+		invalidInputs = append(invalidInputs, invalid...)
 	}
 
 	result := 0
