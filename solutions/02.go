@@ -1,6 +1,7 @@
 package solutions
 
 import (
+	"math"
 	"strconv"
 	"strings"
 
@@ -64,6 +65,18 @@ func factors(n int, cache *map[int][]int) (out []int) {
 	return out
 }
 
+func fn(n, x, l int) int {
+	out := 0
+
+	stem := int(n / int(math.Pow10(l-x)))
+
+	for i := range l / x {
+		out += stem * int(math.Pow10(i*x))
+	}
+
+	return out
+}
+
 func findInvalid(start, end int, factorsCache *map[int][]int, invalidCache *map[int]bool) []int {
 	invalidInputs := make([]int, 0)
 	for n := range end - start + 1 {
@@ -77,14 +90,13 @@ func findInvalid(start, end int, factorsCache *map[int][]int, invalidCache *map[
 			continue
 		}
 
-		nStr := strconv.Itoa(n)
-
-		fac := factors(len(nStr), factorsCache)
+		l := int(math.Ceil(math.Log10(float64(n))))
+		fac := factors(l, factorsCache)
 
 		found := false
 		for _, f := range fac {
-			repeated := strings.Repeat(nStr[0:f], len(nStr)/f)
-			if repeated == nStr {
+			repeated := fn(n, f, l)
+			if repeated == n {
 				found = true
 				invalidInputs = append(invalidInputs, n)
 				break
