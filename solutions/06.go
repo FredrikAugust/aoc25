@@ -1,7 +1,6 @@
 package solutions
 
 import (
-	"log/slog"
 	"math"
 	"slices"
 	"strconv"
@@ -10,11 +9,11 @@ import (
 	"github.com/fredrikaugust/aoc25/utils"
 )
 
-func transpose(input [][]string) [][]string {
-	output := make([][]string, len(input[0]))
+func transpose[E string | byte](input [][]E) [][]E {
+	output := make([][]E, len(input[0]))
 
 	for y := range len(input[0]) {
-		line := make([]string, len(input))
+		line := make([]E, len(input))
 		for x := range len(input) {
 			line[x] = input[x][y]
 		}
@@ -68,57 +67,78 @@ func getDigitInPos(num, pos int) int {
 }
 
 func Day6B() int {
-	// input := utils.GetInput(6)
-	input := utils.GetSample(6)
+	input := utils.GetInput(6)
+	// input := utils.GetSample(6)
+	lines := slices.Collect(strings.Lines(input))
 
-	cells := make([][]string, 0)
-
-	for line := range strings.Lines(input) {
-		cells = append(cells, strings.Fields(line))
+	longestLineLen := 0
+	for _, l := range lines {
+		if len(l) > longestLineLen {
+			longestLineLen = len(l)
+		}
 	}
 
-	problems := transpose(cells)
-	result := 0
+	blocks := make([][]string, 0)
 
-	for _, problem := range problems {
-		operand := problem[len(problem)-1]
-
-		numbersStr := problem[:len(problem)-1]
-		numbers := make([]int, len(numbersStr))
-		for i, numStr := range numbersStr {
-			numbers[i], _ = strconv.Atoi(numStr)
-		}
-
-		maxNum := slices.Max(numbers)
-		maxK := int(math.Floor(math.Log10(float64(maxNum)))) + 1
-		// newNumbers := make([]int, len(numbers))
-		for k := range maxK {
-			digits := make([]int, 0)
-			for _, n := range numbers {
-				digits = append(digits, getDigitInPos(n, k))
+	buf := make([]string, 0)
+	for i := range longestLineLen {
+		var column strings.Builder
+		for _, line := range lines {
+			if i >= len(line) {
+				column.WriteString(" ")
+			} else {
+				column.WriteByte(line[i])
 			}
+		}
+		// if all spaces i.e. finished block
+		if strings.TrimSpace(column.String()) == "" {
+			rows := make([]string, 0)
+			for j := range len(buf[0]) {
+				var row strings.Builder
+				for i := range len(buf) {
+					row.WriteByte(buf[i][j])
+				}
+				rows = append(rows, row.String())
+			}
+			buf = make([]string, 0)
+			blocks = append(blocks, rows)
+		} else {
+			buf = append(buf, column.String())
+		}
+	}
 
-			slog.Info("out", "val", digits, "maxK", maxK, "maxNum", maxNum, "numbers", numbers)
+	sum := 0
+	for _, block := range blocks {
+		operand := string(block[len(block)-1][0])
+		numStrs := block[0 : len(block)-1]
+		numBlock := make([][]byte, 0)
+		for _, str := range numStrs {
+			numBlock = append(numBlock, []byte(str))
+		}
+		numBlock = transpose(numBlock)
+		numbers := make([]int, 0)
+		for _, n := range numBlock {
+			var s strings.Builder
+			s.Write(n)
+			i, _ := strconv.Atoi(strings.TrimSpace(s.String()))
+			numbers = append(numbers, i)
 		}
 
 		switch operand {
 		case "*":
-			res := 1
-			for _, num := range problem[1:] {
-				n, _ := strconv.Atoi(num)
-				res *= n
+			value := 1
+			for _, n := range numbers {
+				value *= n
 			}
-			result += res
+			sum += value
 		case "+":
-			res := 0
-			for _, num := range problem[1:] {
-				n, _ := strconv.Atoi(num)
-				res += n
+			value := 0
+			for _, n := range numbers {
+				value += n
 			}
-			result += res
-
+			sum += value
 		}
 	}
 
-	return result
+	return sum
 }
