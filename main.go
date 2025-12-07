@@ -2,8 +2,6 @@ package main
 
 import (
 	"log/slog"
-	"os"
-	"runtime/pprof"
 	"time"
 
 	"github.com/fredrikaugust/aoc25/solutions"
@@ -16,17 +14,19 @@ func main() {
 	timeFunc(1, 2, solutions.Day1B)
 
 	timeFunc(2, 1, solutions.Day2A)
-	f, _ := os.Create("./day2.prof")
-	pprof.StartCPUProfile(f)
 	timeFunc(2, 2, solutions.Day2B)
-	pprof.StopCPUProfile()
-	f.Close()
 
 	timeFunc(3, 1, solutions.Day3A)
 	timeFunc(3, 2, solutions.Day3B)
 
 	timeFunc(4, 1, solutions.Day4A)
 	timeFunc(4, 2, solutions.Day4B)
+
+	timeFunc(5, 1, solutions.Day5A)
+	timeFunc(5, 2, solutions.Day5B)
+
+	timeFunc(6, 1, solutions.Day6A)
+	timeFunc(6, 2, solutions.Day6B)
 }
 
 func timeFunc(day, part int, f func() int) {
