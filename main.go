@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log/slog"
 	"time"
 
@@ -27,10 +28,13 @@ func main() {
 
 	timeFunc(6, 1, solutions.Day6A)
 	timeFunc(6, 2, solutions.Day6B)
+
+	timeFunc(7, 1, solutions.Day7A)
+	timeFunc(7, 2, solutions.Day7B)
 }
 
 func timeFunc(day, part int, f func() int) {
 	pre := time.Now()
 	res := f()
-	slog.Info("finished", "day", day, "part", part, "duration", time.Since(pre), "result", res)
+	fmt.Printf("Finished Day %d.%d in %14s. Result = %v\n", day, part, time.Since(pre), res)
 }
