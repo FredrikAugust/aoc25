@@ -16,8 +16,6 @@ func Day7A() int {
 		m = append(m, []byte(strings.TrimSpace(line)))
 	}
 
-	display(m)
-
 	lines := slices.Collect(strings.Lines(input))
 
 	prevLine := lines[0]
@@ -44,15 +42,43 @@ func Day7A() int {
 	return count
 }
 
-func display(m [][]byte) {
-	for j := range len(m) {
-		for i := range len(m[0]) {
-			print(string(m[j][i]))
-		}
-		println()
+func Day7B() int {
+	input := utils.GetInput(7)
+
+	m := make([][]byte, 0)
+
+	for line := range strings.Lines(input) {
+		m = append(m, []byte(strings.TrimSpace(line)))
 	}
+
+	lines := slices.Collect(strings.Lines(input))
+
+	rootPos := strings.Index(lines[0], "S")
+
+	return traverse(rootPos, lines[1:])
 }
 
-func Day7B() int {
-	return 0
+type Pos struct {
+	x         int
+	linesLeft int
+}
+
+var cache = make(map[Pos]int, 0)
+
+func traverse(x int, lines []string) int {
+	pos := Pos{x, len(lines)}
+	val, exists := cache[pos]
+	if exists {
+		return val
+	}
+	if len(lines) == 0 {
+		return 1
+	}
+	if lines[0][x] == '^' {
+		v := traverse(x-1, lines[1:]) + traverse(x+1, lines[1:])
+		cache[pos] = v
+		return v
+	}
+	cache[pos] = traverse(x, lines[1:])
+	return traverse(x, lines[1:])
 }
