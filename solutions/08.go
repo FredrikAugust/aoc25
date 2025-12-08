@@ -1,6 +1,7 @@
 package solutions
 
 import (
+	"fmt"
 	"iter"
 	"maps"
 	"math"
@@ -215,4 +216,91 @@ func Day8B() int {
 		edges = edges[1:]
 
 	}
+}
+
+func Day8B2() int {
+	input := utils.GetInput(8)
+
+	lines := slices.Collect(strings.Lines(input))
+
+	type Node struct {
+		x int
+		y int
+		z int
+	}
+	nodes := make([]Node, len(lines))
+
+	for i, line := range lines {
+		var x, y, z int
+		_, _ = fmt.Sscanf(strings.TrimSpace(line), "%d,%d,%d", &x, &y, &z)
+		nodes[i] = Node{x, y, z}
+	}
+
+	type NodeEdge struct {
+		dist    float64
+		fromIdx int
+		toIdx   int
+	}
+
+	edges := make([]NodeEdge, 0) // We do this to cache for later use
+	for i, _ := range nodes {
+		for j, _ := range nodes {
+			if i == j {
+				continue
+			}
+			dist := math.Sqrt(math.Pow(float64(nodes[i].x-nodes[j].x), 2) + math.Pow(float64(nodes[i].y-nodes[j].y), 2) + math.Pow(float64(nodes[i].z-nodes[j].z), 2))
+			edges = append(edges, NodeEdge{dist, i, j})
+		}
+	}
+	slices.SortFunc(edges, func(e1, e2 NodeEdge) int {
+		if e1.dist < e2.dist {
+			return -1
+		} else if e1.dist > e2.dist {
+			return 1
+		}
+		return 0
+	})
+	edges = slices.CompactFunc(edges, func(e1, e2 NodeEdge) bool {
+		return e1.fromIdx == e2.toIdx && e1.toIdx == e2.fromIdx
+	})
+	parent := make([]int, len(nodes))
+	rank := make([]int, len(nodes))
+	for i := range nodes {
+		parent[i] = i
+		rank[i] = 0
+	}
+
+	count := 0
+	i := 0
+
+	for {
+		e := edges[i]
+		fromSet := findSet(e.fromIdx, &parent)
+		toSet := findSet(e.toIdx, &parent)
+
+		if fromSet != toSet {
+			count++
+			unionSets(e.fromIdx, e.toIdx, &parent)
+			if count == len(nodes)-1 {
+				return nodes[e.fromIdx].x * nodes[e.toIdx].x
+			}
+		}
+
+		i++
+	}
+}
+
+func unionSets(x, y int, parent *[]int) {
+	x, y = findSet(x, parent), findSet(y, parent)
+	if x != y {
+		(*parent)[y] = x
+	}
+}
+
+func findSet(i int, parent *[]int) int {
+	if i == (*parent)[i] {
+		return i
+	}
+
+	return findSet((*parent)[i], parent)
 }
