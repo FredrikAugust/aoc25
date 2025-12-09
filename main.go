@@ -34,7 +34,9 @@ func main() {
 
 	timeFunc(8, 1, solutions.Day8A)
 	timeFunc(8, 2, solutions.Day8B2)
-	// timeFunc(8, 2, solutions.Day8B)
+
+	timeFunc(9, 1, solutions.Day9A)
+	timeFunc(9, 2, solutions.Day9B)
 }
 
 func timeFunc(day, part int, f func() int) {
