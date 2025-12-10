@@ -49,7 +49,6 @@ pub fn day10part2() -> u64 {
 }
 
 fn solve_machine(machine: &Machine) -> u64 {
-    println!("Solving machine {:?}", machine.joltages);
     let mut map: HashMap<usize, Vec<usize>> = Default::default();
     let inputs = machine
         .buttons
