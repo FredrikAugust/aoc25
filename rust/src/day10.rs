@@ -1,7 +1,7 @@
 use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use regex::Regex;
 use std::{collections::HashMap, fs::File, io::Read, ops::Index};
-use z3::{Solver, ast::Int};
+use z3::{Optimize, ast::Int};
 
 #[derive(Debug)]
 struct Machine {
@@ -9,7 +9,7 @@ struct Machine {
     joltages: Vec<i32>,
 }
 
-pub fn day10part2() -> i32 {
+pub fn day10part2() -> u64 {
     let mut buf: String = Default::default();
     File::open("src/10-input.txt")
         .unwrap()
@@ -48,7 +48,7 @@ pub fn day10part2() -> i32 {
     machines.par_iter().map(solve_machine).sum()
 }
 
-fn solve_machine(machine: &Machine) -> i32 {
+fn solve_machine(machine: &Machine) -> u64 {
     println!("Solving machine {:?}", machine.joltages);
     let mut map: HashMap<usize, Vec<usize>> = Default::default();
     let inputs = machine
@@ -71,10 +71,10 @@ fn solve_machine(machine: &Machine) -> i32 {
         })
         .collect::<Vec<_>>();
 
-    let solver = Solver::new();
+    let solver = Optimize::new();
 
     for input in inputs.iter() {
-        solver.assert(input.ge(0));
+        solver.assert(&input.ge(0));
     }
 
     for (i, joltage) in machine.joltages.iter().enumerate() {
@@ -86,16 +86,17 @@ fn solve_machine(machine: &Machine) -> i32 {
             .collect::<Vec<_>>();
 
         for relevant_input in &relevant_inputs {
-            solver.assert(relevant_input.le(*joltage));
+            solver.assert(&relevant_input.le(*joltage));
         }
-        solver.assert(Int::add(relevant_inputs.as_slice()).eq(*joltage));
+        solver.assert(&Int::add(relevant_inputs.as_slice()).eq(*joltage));
     }
 
-    let smallest = solver
-        .solutions(&inputs, false)
-        .map(|s| s.iter().map(Int::as_u64).map(Option::unwrap).sum::<u64>())
-        .min()
-        .unwrap();
+    solver.minimize(&Int::add(inputs.as_slice()));
+    solver.check(&[]);
+    let model = solver.get_model().unwrap();
 
-    i32::try_from(smallest).unwrap()
+    inputs
+        .iter()
+        .map(|i| model.eval(i, true).unwrap().as_u64().unwrap())
+        .sum::<u64>()
 }
