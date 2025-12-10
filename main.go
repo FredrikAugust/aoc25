@@ -39,7 +39,8 @@ func main() {
 	timeFunc(9, 2, solutions.Day9B)
 
 	timeFunc(10, 1, solutions.Day10A)
-	timeFunc(10, 2, solutions.Day10B)
+	// day 10 part 2 is written in rust as go didn't have z3 solver available easily, and rust did
+	// see rust/src/day10.rs
 }
 
 func timeFunc(day, part int, f func() int) {
