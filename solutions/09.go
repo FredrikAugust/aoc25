@@ -59,6 +59,7 @@ func Day9B() int {
 	}
 	// this was borrowed in large part from https://github.com/blfuentes/AdventOfCode_AllYears/blob/main/AdventOfCode_2025_Go/day09/day09_2.go
 	// which is again inspired by https://kishimotostudios.com/articles/aabb_collision/
+	// ended up having to doodle this out on a piece of paper to understand it
 	intersects := func(coord1, coord2 Coord) bool {
 		var minX, maxX, minY, maxY int
 		if coord1.x < coord2.x {
@@ -116,8 +117,4 @@ func Day9B() int {
 	}
 
 	return biggest
-}
-
-func intAbs(currX int) int {
-	return int(math.Abs(float64(currX)))
 }

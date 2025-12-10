@@ -37,10 +37,13 @@ func main() {
 
 	timeFunc(9, 1, solutions.Day9A)
 	timeFunc(9, 2, solutions.Day9B)
+
+	timeFunc(10, 1, solutions.Day10A)
+	timeFunc(10, 2, solutions.Day10B)
 }
 
 func timeFunc(day, part int, f func() int) {
 	pre := time.Now()
 	res := f()
-	fmt.Printf("Finished Day %d.%d in %14s. Result = %v\n", day, part, time.Since(pre), res)
+	fmt.Printf("Finished Day %2d.%d in %14s. Result = %v\n", day, part, time.Since(pre), res)
 }
