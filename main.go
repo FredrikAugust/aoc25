@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/fredrikaugust/aoc25/solutions"
+	"github.com/fredrikaugust/aoc25/solutions/day11"
 )
 
 func main() {
@@ -41,6 +42,9 @@ func main() {
 	timeFunc(10, 1, solutions.Day10A)
 	// day 10 part 2 is written in rust as go didn't have z3 solver available easily, and rust did
 	// see rust/src/day10.rs
+
+	timeFunc(11, 1, day11.Day11A)
+	timeFunc(11, 2, day11.Day11B)
 }
 
 func timeFunc(day, part int, f func() int) {
