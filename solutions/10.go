@@ -64,7 +64,7 @@ func Day10A() int {
 		b := make([][]int, 0)
 		for buttonGroup := range strings.FieldsSeq(buttons) {
 			buttonGroup = buttonGroup[1 : len(buttonGroup)-1]
-			b = append(b, utils.ListOfIntsFromString(buttonGroup))
+			b = append(b, utils.ListOfIntsFromString(buttonGroup, ","))
 		}
 		machine.Buttons = b
 

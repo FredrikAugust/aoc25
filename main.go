@@ -7,6 +7,7 @@ import (
 
 	"github.com/fredrikaugust/aoc25/solutions"
 	"github.com/fredrikaugust/aoc25/solutions/day11"
+	"github.com/fredrikaugust/aoc25/solutions/day12"
 )
 
 func main() {
@@ -45,6 +46,9 @@ func main() {
 
 	timeFunc(11, 1, day11.Day11A)
 	timeFunc(11, 2, day11.Day11B)
+
+	timeFunc(12, 1, day12.Day12A)
+	// timeFunc(11, 2, day11.Day11B)
 }
 
 func timeFunc(day, part int, f func() int) {

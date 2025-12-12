@@ -6,9 +6,9 @@ import (
 	"strings"
 )
 
-func ListOfIntsFromString(i string) []int {
+func ListOfIntsFromString(i string, sep string) []int {
 	out := make([]int, 0)
-	for n := range strings.SplitSeq(i, ",") {
+	for n := range strings.SplitSeq(i, sep) {
 		num, _ := strconv.Atoi(n)
 		out = append(out, num)
 	}
